@@ -22,3 +22,7 @@ window/vsync/vsync_mode=0
 [dotnet]
 
 project/assembly_name="Aspen-s Card Game"
+
+[editor]
+
+movie_writer/movie_file="D:/workspaces/psy/Godot/aspen's-card-game/111.avi"
