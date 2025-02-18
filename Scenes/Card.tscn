@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://3bmh5dqko4ws"]
+[gd_scene load_steps=5 format=3 uid="uid://3bmh5dqko4ws"]
 
-[ext_resource type="Texture2D" uid="uid://c3ohso4ts2yew" path="res://Assets/card/7.jpeg" id="1_fg3wu"]
 [ext_resource type="Script" path="res://Scripts/Card.cs" id="1_gko30"]
+[ext_resource type="Texture2D" uid="uid://clyy1dlm5dkpe" path="res://Assets/card/heros/大乔.png" id="2_mkvqp"]
+[ext_resource type="Texture2D" uid="uid://bwjlnjhajmt0q" path="res://Assets/card/bk.png" id="3_eydx6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_efcyu"]
 size = Vector2(120, 176)
@@ -11,7 +12,11 @@ script = ExtResource("1_gko30")
 
 [node name="CardImage" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.294)
-texture = ExtResource("1_fg3wu")
+texture = ExtResource("2_mkvqp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.292)
+texture = ExtResource("3_eydx6")
 
 [node name="Area2D" type="Area2D" parent="."]
 
