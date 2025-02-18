@@ -108,7 +108,6 @@ public partial class CardManager : Node2D
 
 		CardSlot cardSlotFound = RaycastCheckForCardSlot();
 
-		GD.Print(cardSlotFound);
 		if (cardSlotFound != null && !cardSlotFound.CardInSlot)
 		{
 			_CardBeingDragged.Position = new Vector2(
@@ -171,8 +170,6 @@ public partial class CardManager : Node2D
 		};
 
 		Godot.Collections.Array<GodotCollectionsDictionary> result = spaceState.IntersectPoint(parameters);
-
-		GD.Print(result);
 
 		if (result.Count > 0)
 		{
