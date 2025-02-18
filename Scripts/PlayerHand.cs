@@ -10,14 +10,14 @@ public partial class PlayerHand : Node2D
 	private const int CARD_WIDTH = 200;
 	private const int HAND_Y_POSITION = 890;
 
-	private float centerScreenX;
+	private float _centerScreenX;
 
-	private readonly List<Card> playerHand = new List<Card>();
+	private readonly List<Card> _playerHandList = new List<Card>();
 
 	public override void _Ready()
 	{
 		// 当前屏幕宽中心
-		centerScreenX = GetViewport().GetVisibleRect().Size.X / 2;
+		_centerScreenX = GetViewport().GetVisibleRect().Size.X / 2;
 
 		CardManager cardManager = GetParent().GetNode<CardManager>("CardManager");
 		PackedScene cardScene = GD.Load<PackedScene>(CARD_SCENE_PATH);
@@ -41,9 +41,9 @@ public partial class PlayerHand : Node2D
 	public void AddCardToHand(Card card)
 	{
 		// 如果卡片不在手牌中,就加入手牌
-		if (!playerHand.Contains(card))
+		if (!_playerHandList.Contains(card))
 		{
-			playerHand.Insert(0, card);
+			_playerHandList.Insert(0, card);
 			UpdateHandPositions();
 		}
 		// 卡片弹回原来位置
@@ -57,11 +57,11 @@ public partial class PlayerHand : Node2D
 	// 调整卡牌的位置顺序
 	private void UpdateHandPositions()
 	{
-		for (int i = 0; i < playerHand.Count(); i++)
+		for (int i = 0; i < _playerHandList.Count(); i++)
 		{
 			Vector2 newPosition = new Vector2(CalculateCardPosition(i), HAND_Y_POSITION);
 
-			Card card = playerHand[i];
+			Card card = _playerHandList[i];
 			card.startingPosition = newPosition;
 
 			AnimateCardToPosition(card, newPosition);
@@ -79,10 +79,10 @@ public partial class PlayerHand : Node2D
 	public void RemoveCardFromHand(Card card)
 	{
 		// 检查该卡片是否在手牌中
-		if (playerHand.Contains(card))
+		if (_playerHandList.Contains(card))
 		{
 			// List删除指定元素
-			playerHand.Remove(card);
+			_playerHandList.Remove(card);
 
 			UpdateHandPositions();
 		}
@@ -91,9 +91,9 @@ public partial class PlayerHand : Node2D
 	// 根据索引来处理卡牌的位置
 	private float CalculateCardPosition(int index)
 	{
-		int totalWidth = (playerHand.Count() - 1) * CARD_WIDTH;
+		int totalWidth = (_playerHandList.Count() - 1) * CARD_WIDTH;
 
-		float xOffset = centerScreenX + index * CARD_WIDTH - totalWidth / 2;
+		float xOffset = _centerScreenX + index * CARD_WIDTH - totalWidth / 2;
 
 		return xOffset;
 	}

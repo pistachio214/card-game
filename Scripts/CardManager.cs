@@ -9,30 +9,30 @@ public partial class CardManager : Node2D
 
 	public const uint COLLISION_MASK_CARD_SLOT = 2;
 
-	private Card cardBeingDragged;
+	private Card _cardBeingDragged;
 
-	private Vector2 screenSize;
+	private Vector2 _screenSize;
 
-	private bool isHoveringOnCard;
+	private bool _isHoveringOnCard;
 
-	private PlayerHand playerHandReference;
+	private PlayerHand _playerHandReference;
 
 	public override void _Ready()
 	{
-		screenSize = GetViewportRect().Size;
-		playerHandReference = GetParent().GetNode<PlayerHand>("PlayerHand");
+		_screenSize = GetViewportRect().Size;
+		_playerHandReference = GetParent().GetNode<PlayerHand>("PlayerHand");
 	}
 
 	public override void _Process(double delta)
 	{
 		// 左键点击的是卡片，就把鼠标位置给到卡牌，让卡牌随着鼠标移动
-		if (cardBeingDragged != null)
+		if (_cardBeingDragged != null)
 		{
 			Vector2 mousePosition = GetGlobalMousePosition();
 
 			// 为了使拖动不超出屏幕范围，让最大值不超过屏幕范围尺寸
-			cardBeingDragged.Position = new Vector2(
-				Clamp(mousePosition.X, 0, screenSize.X), Clamp(mousePosition.Y, 0, screenSize.Y)
+			_cardBeingDragged.Position = new Vector2(
+				Clamp(mousePosition.X, 0, _screenSize.X), Clamp(mousePosition.Y, 0, _screenSize.Y)
 			);
 		}
 	}
@@ -52,7 +52,7 @@ public partial class CardManager : Node2D
 			}
 			else
 			{
-				if (cardBeingDragged != null)
+				if (_cardBeingDragged != null)
 				{
 					FinishDrag();
 				}
@@ -71,16 +71,16 @@ public partial class CardManager : Node2D
 
 	private void OnHoveredOverCard(Card card)
 	{
-		if (!isHoveringOnCard)
+		if (!_isHoveringOnCard)
 		{
-			isHoveringOnCard = true;
+			_isHoveringOnCard = true;
 			HighlightCard(card, true);
 		}
 	}
 
 	private void OnHoveredOffCard(Card card)
 	{
-		if (cardBeingDragged == null)
+		if (_cardBeingDragged == null)
 		{
 			HighlightCard(card, false);
 			// 判断卡片是否在另一个卡片之上
@@ -91,7 +91,7 @@ public partial class CardManager : Node2D
 			}
 			else
 			{
-				isHoveringOnCard = false;
+				_isHoveringOnCard = false;
 			}
 		}
 
@@ -100,34 +100,34 @@ public partial class CardManager : Node2D
 	// 开始拖动卡牌
 	private void StartDrag(Node2D card)
 	{
-		cardBeingDragged = (Card)card;
+		_cardBeingDragged = (Card)card;
 		card.Scale = new Vector2(1f, 1f);
 	}
 
 	// 结束拖动卡牌
 	private void FinishDrag()
 	{
-		cardBeingDragged.Scale = new Vector2(1.05f, 1.05f);
+		_cardBeingDragged.Scale = new Vector2(1.05f, 1.05f);
 
 		CardSlot cardSlotFound = RaycastCheckForCardSlot();
 
-		if (cardSlotFound != null && !cardSlotFound.CardInSlot)
+		if (cardSlotFound != null && !cardSlotFound.cardInSlot)
 		{
-			playerHandReference.RemoveCardFromHand(cardBeingDragged);
+			_playerHandReference.RemoveCardFromHand(_cardBeingDragged);
 
-			cardBeingDragged.Position = new Vector2(
+			_cardBeingDragged.Position = new Vector2(
 				x: cardSlotFound.Position.X,
 				y: cardSlotFound.Position.Y
 			);
-			cardBeingDragged.GetNode<CollisionShape2D>("Area2D/CollisionShape2D").Disabled = true;
-			cardSlotFound.CardInSlot = true;
+			_cardBeingDragged.GetNode<CollisionShape2D>("Area2D/CollisionShape2D").Disabled = true;
+			cardSlotFound.cardInSlot = true;
 		}
 		else
 		{
-			playerHandReference.AddCardToHand(cardBeingDragged);
+			_playerHandReference.AddCardToHand(_cardBeingDragged);
 		}
 
-		cardBeingDragged = null;
+		_cardBeingDragged = null;
 	}
 
 	// 高亮卡片
