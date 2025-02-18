@@ -18,5 +18,5 @@ texture = ExtResource("1_fg3wu")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_efcyu")
 
-[connection signal="mouse_entered" from="Area2D" to="." method="_OnAreaMouseEntered"]
-[connection signal="mouse_exited" from="Area2D" to="." method="_OnAreaMouseExited"]
+[connection signal="mouse_entered" from="Area2D" to="." method="OnAreaMouseEntered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="OnAreaMouseExited"]
