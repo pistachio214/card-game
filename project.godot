@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="Aspen's Card Game"
+config/version="0.0.1"
 run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://logo.png"
 
 [display]
 
@@ -24,7 +25,3 @@ window/vsync/vsync_mode=0
 [dotnet]
 
 project/assembly_name="Aspen-s Card Game"
-
-[editor]
-
-movie_writer/movie_file="D:/workspaces/psy/Godot/aspen's-card-game/video/111.avi"

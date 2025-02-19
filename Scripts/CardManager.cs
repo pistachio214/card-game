@@ -9,6 +9,8 @@ public partial class CardManager : Node2D
 
 	public const uint COLLISION_MASK_CARD_SLOT = 2;
 
+	private const float DEFAULT_CARD_MOVE_SPEED = 0.1f;
+
 	private Card _cardBeingDragged;
 
 	private Vector2 _screenSize;
@@ -21,6 +23,11 @@ public partial class CardManager : Node2D
 	{
 		_screenSize = GetViewportRect().Size;
 		_playerHandReference = GetParent().GetNode<PlayerHand>("PlayerHand");
+
+		InputManager inputManager = GetParent().GetNode<InputManager>("InputManager");
+		inputManager.LeftMouseButtonReleased += OnLeftClickReleased;
+
+
 	}
 
 	public override void _Process(double delta)
@@ -37,28 +44,36 @@ public partial class CardManager : Node2D
 		}
 	}
 
-	public override void _Input(InputEvent @event)
+	// public override void _Input(InputEvent @event)
+	// {
+	// 	// 左键按下的时候，判断是否为卡牌，如果是卡牌就存入临时变量,如果不是就清空临时变量
+	// 	if (@event is InputEventMouseButton inputEvent && inputEvent.ButtonIndex == MouseButton.Left)
+	// 	{
+	// 		if (inputEvent.Pressed)
+	// 		{
+	// 			Node2D cardNode = RaycastCheckForCard();
+	// 			if (cardNode != null)
+	// 			{
+	// 				StartDrag(cardNode);
+	// 			}
+	// 		}
+	// 		else
+	// 		{
+	// 			if (_cardBeingDragged != null)
+	// 			{
+	// 				FinishDrag();
+	// 			}
+
+	// 		}
+
+	// 	}
+	// }
+
+	private void OnLeftClickReleased()
 	{
-		// 左键按下的时候，判断是否为卡牌，如果是卡牌就存入临时变量,如果不是就清空临时变量
-		if (@event is InputEventMouseButton inputEvent && inputEvent.ButtonIndex == MouseButton.Left)
+		if (_cardBeingDragged != null)
 		{
-			if (inputEvent.Pressed)
-			{
-				Node2D cardNode = RaycastCheckForCard();
-				if (cardNode != null)
-				{
-					StartDrag(cardNode);
-				}
-			}
-			else
-			{
-				if (_cardBeingDragged != null)
-				{
-					FinishDrag();
-				}
-
-			}
-
+			FinishDrag();
 		}
 	}
 
@@ -98,7 +113,7 @@ public partial class CardManager : Node2D
 	}
 
 	// 开始拖动卡牌
-	private void StartDrag(Node2D card)
+	public void StartDrag(Node2D card)
 	{
 		_cardBeingDragged = (Card)card;
 		card.Scale = new Vector2(1f, 1f);
@@ -124,7 +139,7 @@ public partial class CardManager : Node2D
 		}
 		else
 		{
-			_playerHandReference.AddCardToHand(_cardBeingDragged);
+			_playerHandReference.AddCardToHand(_cardBeingDragged, DEFAULT_CARD_MOVE_SPEED);
 		}
 
 		_cardBeingDragged = null;

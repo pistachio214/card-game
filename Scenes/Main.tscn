@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp6iljrtpslqm"]
+[gd_scene load_steps=8 format=3 uid="uid://bp6iljrtpslqm"]
 
 [ext_resource type="Script" path="res://Scripts/CardManager.cs" id="1_u7me8"]
 [ext_resource type="Script" path="res://Scripts/PlayerHand.cs" id="3_14c58"]
 [ext_resource type="PackedScene" uid="uid://drteql3g4edch" path="res://Scenes/CardSlot.tscn" id="3_qf02s"]
+[ext_resource type="Script" path="res://Scripts/Deck.cs" id="4_34yab"]
+[ext_resource type="Texture2D" uid="uid://cynsyddqfn60x" path="res://Assets/card/deck.png" id="4_afu65"]
+[ext_resource type="Script" path="res://Scripts/InputManager.cs" id="6_fy8s2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ejjeu"]
+size = Vector2(118, 173)
 
 [node name="Main" type="Node2D"]
 
@@ -17,3 +23,43 @@ position = Vector2(480, 275)
 
 [node name="PlayerHand" type="Node2D" parent="."]
 script = ExtResource("3_14c58")
+
+[node name="Deck" type="Node2D" parent="."]
+position = Vector2(150, 890)
+script = ExtResource("4_34yab")
+
+[node name="DeckImage" type="Sprite2D" parent="Deck"]
+z_index = -2
+scale = Vector2(0.559633, 0.532934)
+texture = ExtResource("4_afu65")
+
+[node name="Area2D" type="Area2D" parent="Deck"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deck/Area2D"]
+shape = SubResource("RectangleShape2D_ejjeu")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Deck"]
+modulate = Color(0, 0, 0, 1)
+z_index = -2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -25.0
+offset_right = 2.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/shadow_outline_size = 2
+bbcode_enabled = true
+text = "0"
+
+[node name="InputManager" type="Node2D" parent="."]
+script = ExtResource("6_fy8s2")

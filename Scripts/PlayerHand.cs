@@ -5,10 +5,10 @@ using System.Linq;
 
 public partial class PlayerHand : Node2D
 {
-	private const uint HAND_COUNT = 8;
-	private const string CARD_SCENE_PATH = "res://Scenes/Card.tscn";
 	private const int CARD_WIDTH = 200;
 	private const int HAND_Y_POSITION = 890;
+
+	private const float DEFAULT_CARD_MOVE_SPEED = 0.1f;
 
 	private float _centerScreenX;
 
@@ -19,17 +19,7 @@ public partial class PlayerHand : Node2D
 		// 当前屏幕宽中心
 		_centerScreenX = GetViewport().GetVisibleRect().Size.X / 2;
 
-		CardManager cardManager = GetParent().GetNode<CardManager>("CardManager");
-		PackedScene cardScene = GD.Load<PackedScene>(CARD_SCENE_PATH);
 
-		for (int i = 0; i < HAND_COUNT; i++)
-		{
-			var newCard = cardScene.Instantiate<Card>();
-			cardManager.AddChild(newCard);
-			newCard.Name = "Card" + (i + 1).ToString();
-
-			AddCardToHand(newCard);
-		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,24 +28,24 @@ public partial class PlayerHand : Node2D
 	}
 
 	// 卡片加入手牌数组
-	public void AddCardToHand(Card card)
+	public void AddCardToHand(Card card, float speed)
 	{
 		// 如果卡片不在手牌中,就加入手牌
 		if (!_playerHandList.Contains(card))
 		{
 			_playerHandList.Insert(0, card);
-			UpdateHandPositions();
+			UpdateHandPositions(speed);
 		}
 		// 卡片弹回原来位置
 		else
 		{
-			AnimateCardToPosition(card, card.startingPosition);
+			AnimateCardToPosition(card, card.startingPosition, DEFAULT_CARD_MOVE_SPEED);
 		}
 
 	}
 
 	// 调整卡牌的位置顺序
-	private void UpdateHandPositions()
+	private void UpdateHandPositions(float speed)
 	{
 		for (int i = 0; i < _playerHandList.Count(); i++)
 		{
@@ -64,15 +54,15 @@ public partial class PlayerHand : Node2D
 			Card card = _playerHandList[i];
 			card.startingPosition = newPosition;
 
-			AnimateCardToPosition(card, newPosition);
+			AnimateCardToPosition(card, newPosition, speed);
 		}
 	}
 
 	// 移动卡牌到指定位置
-	private void AnimateCardToPosition(Card card, Vector2 newPosition)
+	private void AnimateCardToPosition(Card card, Vector2 newPosition, float speed)
 	{
 		Tween tween = GetTree().CreateTween();
-		tween.TweenProperty(card, "position", newPosition, 0.1);
+		tween.TweenProperty(card, "position", newPosition, speed);
 	}
 
 	// TODO 删除手牌中卡牌的位置
@@ -84,7 +74,7 @@ public partial class PlayerHand : Node2D
 			// List删除指定元素
 			_playerHandList.Remove(card);
 
-			UpdateHandPositions();
+			UpdateHandPositions(DEFAULT_CARD_MOVE_SPEED);
 		}
 	}
 
