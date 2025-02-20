@@ -9,7 +9,7 @@ public partial class Deck : Node2D
 
 	private PlayerHand _playerHand;
 
-	private RichTextLabel _richTextLabel;
+	private Label _deckNumberLabel;
 
 	private const string CARD_SCENE_PATH = "res://Scenes/Card.tscn";
 
@@ -24,9 +24,8 @@ public partial class Deck : Node2D
 	public override void _Ready()
 	{
 		_playerHand = GetParent().GetNode<PlayerHand>("PlayerHand");
-		_richTextLabel = GetNode<RichTextLabel>("RichTextLabel");
-		_richTextLabel.BbcodeEnabled = true;
-		_richTextLabel.Text = "[center]" + _playerDeckList.Count + "[/center]";
+		_deckNumberLabel = GetNode<Label>("DeckNumber");
+		_deckNumberLabel.Text = _playerDeckList.Count.ToString();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,10 +42,10 @@ public partial class Deck : Node2D
 		{
 			GetNode<CollisionShape2D>("Area2D/CollisionShape2D").Disabled = true;
 			GetNode<Sprite2D>("DeckImage").Visible = false;
-			_richTextLabel.Visible = false;
+			_deckNumberLabel.Visible = false;
 		}
 
-		_richTextLabel.Text = "[center]" + _playerDeckList.Count + "[/center]";
+		_deckNumberLabel.Text = _playerDeckList.Count.ToString();
 
 		CardManager cardManager = GetParent().GetNode<CardManager>("CardManager");
 		PackedScene cardScene = GD.Load<PackedScene>(CARD_SCENE_PATH);
